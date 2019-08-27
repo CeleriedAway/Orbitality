@@ -116,6 +116,11 @@ namespace TWL
             return (float)this.Sample();
         }
         
+        public virtual int Sign()
+        {
+            return Next() % 2 == 0 ? 1 : -1;
+        }
+        
         public virtual double NextDouble()
         {
             return this.Sample();

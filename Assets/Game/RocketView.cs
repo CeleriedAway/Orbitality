@@ -9,7 +9,7 @@ namespace Game
         public void Show(RocketInstance rocket)
         {
             this.rocket = rocket;
-            this.transform.localScale = Vector3.one * 0.08f; 
+            this.transform.localScale = Vector3.one * 0.1f; 
         }
         void Update()
         {

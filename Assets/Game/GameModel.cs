@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 using TWL;
@@ -23,7 +22,7 @@ namespace Game
 
         public bool destructable => maxHp > 0;
     }
-    
+
     // I often design game entities as public clean data
     [Serializable]
     public class Planet
@@ -54,6 +53,8 @@ namespace Game
         public float acceleration;
         public float damage;
         public float cooldown;
+        public float gravityInfluence = 1;
+        public string description;
         // to prevent rocket collision with its own planet
         public float invulTime = 0.5f;
     }
@@ -118,7 +119,8 @@ namespace Game
                 position = planet.position + direction * planet.config.radius,
                 speed =  rocket.startingSpeed * direction,
                 invulTime = rocket.invulTime,
-                lifeTime = 15
+                lifeTime = 15,
+                parentId = planet.id
             });
         }
 
@@ -138,7 +140,7 @@ namespace Game
                 rocket.lifeTime -= dt;
                 if (rocket.lifeTime <= 0) rockets.RemoveAt(i);
                 
-                rocket.speed += GravityField(rocket.position) * dt;
+                rocket.speed += dt * rocket.config.gravityInfluence * GravityField(rocket.position);
                 // Native rocket acceleration
                 rocket.speed += rocket.speed.normalized * (rocket.config.acceleration * dt);
                 rocket.position += rocket.speed * dt;
@@ -149,7 +151,7 @@ namespace Game
             {
                 planet.rotationPhase += dt * planet.config.rotationSpeed;
                 planet.position = planet.config.orbitDistance *
-                                  new Vector2(Mathf.Cos(planet.rotationPhase), Mathf.Sin(planet.rotationPhase));
+                                  new Vector2(Mathf.Cos(planet.rotationPhase), 0.7f * Mathf.Sin(planet.rotationPhase));
                 planet.currentRocketCooldown -= dt;
             }
         }

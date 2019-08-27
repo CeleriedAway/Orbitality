@@ -31,8 +31,9 @@ namespace Game
             menu.SetActive(paused);
             menu.newGame.Subscribe(() =>
             {
-                gameCell.value = GameModel.New();
+                gameCell.value = GameModel.New(menu.rocketConfigSelected);
                 paused.value = false;
+                ResetTitleToDefault();
             });
             // Also a reactive binding shortcut, check its readability
             menu.resume.SetActive(gameCell.IsNot(null));
@@ -40,7 +41,9 @@ namespace Game
             menu.exit.Subscribe(Application.Quit);
             
             // show call 
-            view.Show(gameCell);
+            var planets = gameCell.MapWithDefaultIfNull(m => m.planets, StaticCollection<Planet>.Empty()).Join();
+            var rockets = gameCell.MapWithDefaultIfNull(m => m.rockets, StaticCollection<RocketInstance>.Empty()).Join();
+            view.Show(planets, rockets, gameCell.Map(g => g.playerPlanetId));
         }
 
         public void OnApplicationQuit()
@@ -56,24 +59,15 @@ namespace Game
             menu.title.text = $"You {result}!";
         }
 
+        void ResetTitleToDefault()
+        {
+            menu.title.text = "Orbitality";
+        }
+
         public void Update()
         {
             if (gameCell.value == null || paused.value) return;
             gameCell.value.Update(Time.deltaTime);
-            
-            // Test hotkeys
-            if (Input.GetKeyDown(KeyCode.K)) 
-            {
-                FinishGame(GameResult.Loss);
-                return;
-            }
-
-            // Test hotkeys
-            if (Input.GetKeyDown(KeyCode.O))
-            {
-                FinishGame(GameResult.Win);
-                return;
-            }
 
             if (gameCell.value.IsGameFinished(out var result))
             {
@@ -86,15 +80,31 @@ namespace Game
             {
                 if (gamePlanet.id == game.playerPlanetId)
                 {
-                    if (Input.GetMouseButtonDown(0) && gamePlanet.currentRocketCooldown <= 0)
+                    var planetPos = gameCamera.WorldToScreenPoint(gamePlanet.currentView.transform.position);
+                    //Debug.Log($"planet screen pos: {planetPos} mouse pos{Input.mousePosition}");
+                    var dir = Input.mousePosition - planetPos;
+                    //Debug.Log($"dir: {dir}");
+                    
+                    // updating arrow
+                    var arrowCenterShift = dir.SwapYZ().normalized * gamePlanet.config.radius;
+                    view.UpdateTargetingArrow(
+                        gamePlanet.position.ToVolume() + arrowCenterShift,
+                        Quaternion.LookRotation(dir.SwapYZ())
+                        );
+
+                    if (gamePlanet.currentRocketCooldown <= 0)
                     {
-                        var planetPos = gameCamera.WorldToScreenPoint(gamePlanet.currentView.transform.position);
-                        Debug.Log($"planet screen pos: {planetPos} mouse pos{Input.mousePosition}");
-                        var dir = Input.mousePosition - planetPos;
-                        game.Shoot(gamePlanet, dir);
+                        if (Input.GetMouseButtonDown(0)) game.Shoot(gamePlanet, dir);
                     }
+
+
+                    // Updating rotation hack
+                    var rotCorrection = 0;
+                    if (Input.GetKey(KeyCode.W)) rotCorrection = 1;
+                    if (Input.GetKey(KeyCode.S)) rotCorrection = -1;
+                    gamePlanet.rotationPhase += 0.5f * gamePlanet.config.rotationSpeed * rotCorrection * Time.deltaTime;
                 }
-                else
+                else if (gamePlanet.id != 0)
                 {
                     AI.DoSmth(game, gamePlanet);
                 }

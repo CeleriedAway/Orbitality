@@ -99,6 +99,7 @@ namespace ZergRush
         
         public static int Range(this ZergRandom rand, int min, int max)
         {
+            if (max <= min) return min;
             return min + rand.Next() % (max - min);
         }
         public static float Range(this ZergRandom rand, float min, float max)

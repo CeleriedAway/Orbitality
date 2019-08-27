@@ -6,17 +6,41 @@ namespace Game
 {
     public class GameView : ConnectableObject
     {
-        public Transform root;
-
-        public void Show(Cell<GameModel> model)
+        [SerializeField] Transform root;
+        [SerializeField] Transform targetingArrow;
+        
+        public void Show(IReactiveCollection<Planet> planets, IReactiveCollection<RocketInstance> rockets, ICell<int> playerPlanetId)
         {
-            model.MapWithDefaultIfNull(m => m.planets, StaticCollection<Planet>.Empty()).Join().Present(root, 
+            planets.Present(
+                root, 
                 prefabSelector: data => PrefabRef<PlanetView>.ByPrefab(Resources.Load<PlanetView>(data.config.name)),
-                show: (data, view) => view.Show(data, model.value.playerPlanetId == data.id));
-            
-            model.MapWithDefaultIfNull(m => m.rockets, StaticCollection<RocketInstance>.Empty()).Join().Present(root, 
+                show: (data, view) => view.Show(data, playerPlanetId.value == data.id),
+                delegates: ExplosionOnDeathDelegates<PlanetView>(GameResources.instance.planetDeathFx)
+            );
+
+            rockets.Present(
+                root,
                 prefabSelector: data => PrefabRef<RocketView>.ByName("Missile" + data.config.name),
-                show: (data, view) => view.Show(data));
+                show: (data, view) => view.Show(data),
+                delegates: ExplosionOnDeathDelegates<RocketView>(GameResources.instance.rocketExplosionFx)
+            );
+        }
+
+        public void UpdateTargetingArrow(Vector3 pos, Quaternion rot)
+        {
+            targetingArrow.SetPositionAndRotation(pos, rot);
+        }
+
+        TableDelegates<T> ExplosionOnDeathDelegates<T>(Transform explosionEffectPrefab) where T : ReusableView
+        {
+            return new TableDelegates<T>
+            {
+                onRemove = view => {
+                    var exp = Instantiate(explosionEffectPrefab, view.transform.position, Quaternion.identity);
+                    Destroy(exp.gameObject, 2f);
+                    return 0.0f;
+                },
+            };
         }
     }
 }

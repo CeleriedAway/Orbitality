@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.UIElements;
-using ZergRush.Alive;
 using ZergRush.ReactiveCore;
 
 namespace ZergRush.Alive

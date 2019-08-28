@@ -47,6 +47,7 @@ namespace Game
             // actually a derivative of planet movement formula
             var planetSpeed = planet.config.orbitDistance * planet.config.rotationSpeed *
                               new Vector2(-Mathf.Sin(planet.rotationPhase), 0.7f * Mathf.Cos(planet.rotationPhase));
+            Debug.Log($"planet speed {planetSpeed}");
             
             rockets.Add(new RocketInstance
             {

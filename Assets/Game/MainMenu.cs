@@ -22,7 +22,7 @@ namespace Game
             for (int i = 0; i < 3; i++)
             {
                 var rocket = GameConfig.instance.rockets[i];
-                weaponButtons[i].Show(rocket.description, selectedConfig.Is(rocket));
+                weaponButtons[i].Show(rocket.description.Replace("\\n", "\n"), selectedConfig.Is(rocket));
                 weaponButtons[i].button.ClickStream().Subscribe(() => selectedConfig.value = rocket);
             }
         }

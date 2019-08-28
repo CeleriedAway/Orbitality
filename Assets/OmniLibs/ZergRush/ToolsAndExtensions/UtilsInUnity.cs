@@ -429,9 +429,6 @@ namespace ZergRush
                 data.SaveToJsonFile(path, formatting);
         }
 
-        public static string LayerSpeedParamName(this UnityEditor.Animations.AnimatorControllerLayer[] layers,
-            int layer) => "Speed" + layers[layer].name;
-
         public static void SetAlpha(this Image img, float alpha)
         {
             img.color = new Color(img.color.r, img.color.g, img.color.b, alpha);

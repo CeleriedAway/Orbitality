@@ -3,8 +3,6 @@ using ZergRush;
 
 namespace Game
 {
-    // All generic highly usable resources are here
-
     public partial class GameModel
     {
         static ZergRandom random = new ZergRandom();
@@ -30,10 +28,13 @@ namespace Game
 
         public static GameModel New(RocketConfig playerRocket)
         {
+            // this is kind of 'whatever' code
+            // usually code like this is replaced as soon as possible with valid GD data and configs
+            
             var model = new GameModel();
-
-            // sun as planet impl )) right now it seems ok
+            // sun as planet impl )) right now it seems almost ok, but I surely wont do that in real project
             model.planets.Add(NewPlanet(Sun, 0));
+            
             int planetCount = random.Range(5, 5);
             float basePlanetOrbit = 1;
             for (int i = 1; i <= planetCount; i++)
@@ -51,8 +52,7 @@ namespace Game
                 model.planets.Add(NewPlanet(config, i));
             }
             model.playerPlanetId = random.Range(1, planetCount + 1);
-            if (playerRocket != null)
-                model.PlanetWithId(model.playerPlanetId).rocketUsed = playerRocket;
+            if (playerRocket != null) model.PlanetWithId(model.playerPlanetId).rocketUsed = playerRocket;
             model.Update(0); // settings planet positions
             return model;
         }

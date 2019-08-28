@@ -38,6 +38,7 @@ LastConnection
 Logs/
 Packages/
 Assets/Game/External
+savedata
 
 # FX tests folder
 Assets/PortalHunter/_FX_TESTS/

@@ -17,8 +17,6 @@ namespace Game
 
         static string saveFileName = "saveData";
 
-        // I could categorize logic in different functions by theme (loading, view bindings...) 
-        // but code amount is so few I do not think that is required
         public void Start()
         {
             gameCell.value = Utils.LoadFromJsonFile<GameModel>(saveFileName, () => null, false);
@@ -35,12 +33,16 @@ namespace Game
                 paused.value = false;
                 ResetTitleToDefault();
             });
-            // Also a reactive binding shortcut, check its readability
+            // Also a reactive binding shortcut
             menu.resume.SetActive(gameCell.IsNot(null));
             menu.resume.Subscribe(() => paused.value = false);
             menu.exit.Subscribe(Application.Quit);
             
-            // show call 
+            // Here is the reactive library operators example 
+            // game model is changing over time, and collections in game model are changing over time
+            // Join() allows to collapse any layers of complexity into simple IReactiveCollection or ICell
+            // Its very cool because view actually do not care when and how game model is changed, it just shows dynamic collection of items
+            // MapWithDefaultIfNull(...) allows to choose empty collection when game model is null
             var planets = gameCell.MapWithDefaultIfNull(m => m.planets, StaticCollection<Planet>.Empty()).Join();
             var rockets = gameCell.MapWithDefaultIfNull(m => m.rockets, StaticCollection<RocketInstance>.Empty()).Join();
             view.Show(planets, rockets, gameCell.Map(g => g.playerPlanetId));
@@ -67,13 +69,13 @@ namespace Game
         public void Update()
         {
             if (gameCell.value == null || paused.value) return;
-            gameCell.value.Update(Time.deltaTime);
-
             if (gameCell.value.IsGameFinished(out var result))
             {
                 FinishGame(result);
                 return;
             }
+            
+            gameCell.value.Update(Time.deltaTime);
             
             // Input and AI
             foreach (var gamePlanet in game.planets)
@@ -81,9 +83,7 @@ namespace Game
                 if (gamePlanet.id == game.playerPlanetId)
                 {
                     var planetPos = gameCamera.WorldToScreenPoint(gamePlanet.currentView.transform.position);
-                    //Debug.Log($"planet screen pos: {planetPos} mouse pos{Input.mousePosition}");
                     var dir = Input.mousePosition - planetPos;
-                    //Debug.Log($"dir: {dir}");
                     
                     // updating arrow
                     var arrowCenterShift = dir.SwapYZ().normalized * gamePlanet.config.radius;

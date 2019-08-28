@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace Game
 {
+    
+    // Config class for all gameplay settings and adjustments, right now only rockets are here
     [CreateAssetMenu(fileName = "config", menuName = "Create Game Config", order = 1)]
     public class GameConfig : ScriptableObject
     {

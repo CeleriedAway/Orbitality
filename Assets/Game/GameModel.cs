@@ -9,86 +9,15 @@ using ZergRush.ReactiveCore;
 
 namespace Game
 {
-    [Serializable]
-    public class PlanetConfig
-    {
-        public string name;
-        public float gravityPower;
-        public float orbitDistance;
-        public float radius;
-        // I decided to do non realistic rotation speed that does not depend on orbit
-        public float rotationSpeed;
-        public float maxHp;
-
-        public bool destructable => maxHp > 0;
-    }
-
-    // I often design game entities as public clean data
-    [Serializable]
-    public class Planet
-    {
-        [CanBeNull] public RocketConfig rocketUsed;
-        [CanBeNull] public PlanetConfig config;
-
-        public float rotationPhase;
-        // data that is rarely changed i wrap into reactive property 
-        public float hp;
-        public Vector2 position;
-        public float currentRocketCooldown;
-        public bool onCooldown => currentRocketCooldown > 0;
-        public float relativeCooldown => currentRocketCooldown / rocketUsed.cooldown;
-        public int id;
-        
-        // In some simple cases its ok to store view pointer
-        // But its makes a little less convenient code, so often this is not a production case
-        [GenIgnore] public PlanetView currentView;
-
-    }
-    
-    [Serializable]
-    public class RocketConfig
-    {
-        public string name;
-        public float startingSpeed;
-        public float acceleration;
-        public float damage;
-        public float cooldown;
-        public float gravityInfluence = 1;
-        public string description;
-        // to prevent rocket collision with its own planet
-        public float invulTime = 0.5f;
-    }
-
-    public class RocketInstance
-    {
-        [CanBeNull]
-        public RocketConfig config;
-        public Vector2 position;
-        public Vector2 speed;
-        public float invulTime;
-        public float lifeTime;
-        public int parentId;
-    }
-
-    public enum GameResult
-    {
-        Undefined,
-        Win,
-        Loss
-    }
-
     [GenTask(GenTaskFlags.JsonSerialization | GenTaskFlags.DefaultConstructor)]
     public partial class GameModel : IJsonSerializable
     {
-        // This is reactive collection tool, its make easier to present it with views, to show with different settings
-        // May be it is not the most powerful application, but its useful enough
+        // All game data so far
         public ReactiveCollection<RocketInstance> rockets;
         public ReactiveCollection<Planet> planets;
-
         public int playerPlanetId;
 
-        public Planet PlanetWithId(int id) => planets.FirstOrDefault(p => p.id == id);
-
+        
         public bool IsGameFinished(out GameResult result)
         {
             if (PlanetWithId(playerPlanetId) == null)
@@ -106,6 +35,8 @@ namespace Game
             return false;
         }
 
+        public Planet PlanetWithId(int id) => planets.FirstOrDefault(p => p.id == id);
+        
         public void Shoot(Planet planet, Vector2 direction)
         {
             if (planet.currentRocketCooldown > 0) Debug.LogError("actually can't shoot at the moment");
@@ -113,11 +44,15 @@ namespace Game
             planet.currentRocketCooldown = planet.rocketUsed.cooldown;
             direction.Normalize();
             var rocket = planet.rocketUsed;
+            // actually a derivative of planet movement formula
+            var planetSpeed = planet.config.orbitDistance * planet.config.rotationSpeed *
+                              new Vector2(-Mathf.Sin(planet.rotationPhase), 0.7f * Mathf.Cos(planet.rotationPhase));
+            
             rockets.Add(new RocketInstance
             {
                 config = rocket,
                 position = planet.position + direction * planet.config.radius,
-                speed =  rocket.startingSpeed * direction,
+                speed =  rocket.startingSpeed * direction + planetSpeed,
                 invulTime = rocket.invulTime,
                 lifeTime = 15,
                 parentId = planet.id
@@ -159,7 +94,7 @@ namespace Game
         // n^2 cause data volumes are too small
         void UpdateCollisions()
         {
-            // removing entities right at the place is or with reverse iteration
+            // removing entities right at the place with reverse iteration
             // it can be also done with some 'destroyed' flags with later iteration
             for (var i = rockets.Count - 1; i >= 0; i--)
             {
@@ -200,10 +135,5 @@ namespace Game
             return field;
         }
 
-        // ok.. some hardcoded rockets
-    }
-
-    public static class Tools
-    {
     }
 }

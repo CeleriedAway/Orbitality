@@ -8,6 +8,8 @@ namespace Game
     public static class AI
     {
         static ZergRandom random = new ZergRandom();
+        
+        // My first AI guess is playable enough so did not transfer any attributes to GameConfig
         public static void DoSmth(GameModel model, Planet myPlanet)
         {
             // do nothing if rocket is on cooldown

@@ -11,9 +11,17 @@ namespace Game
         
         public void Show(IReactiveCollection<Planet> planets, IReactiveCollection<RocketInstance> rockets, ICell<int> playerPlanetId)
         {
+            // Present function is a very powerful tool
+            // It allows to show any dynamic collection it can:
+            //     * Automate loading and destruction
+            //     * Automate object pooling
+            //     * Show UI data with different layouts
+            //     * Show UI data in scroll views with reusable cells (when only visible elements are loaded)
+            //     * some other usefull features ...
+            // Here is the simplest case of Present
             planets.Present(
                 root, 
-                prefabSelector: data => PrefabRef<PlanetView>.ByPrefab(Resources.Load<PlanetView>(data.config.name)),
+                prefabSelector: data => Resources.Load<PlanetView>(data.config.name),
                 show: (data, view) => view.Show(data, playerPlanetId.value == data.id),
                 delegates: ExplosionOnDeathDelegates<PlanetView>(GameResources.instance.planetDeathFx)
             );

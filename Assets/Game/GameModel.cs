@@ -22,7 +22,7 @@ namespace Game
         {
             if (PlanetWithId(playerPlanetId) == null)
             {
-                result = GameResult.Loss;
+                result = GameResult.Lose;
                 return true;
             }
             // player and the sun

@@ -8,6 +8,7 @@ namespace Game
     {
         [SerializeField] Transform root;
         [SerializeField] Transform targetingArrow;
+        [SerializeField] Transform hudCanvas;
         
         public void Show(IReactiveCollection<Planet> planets, IReactiveCollection<RocketInstance> rockets, ICell<int> playerPlanetId)
         {
@@ -33,6 +34,8 @@ namespace Game
                 delegates: ExplosionOnDeathDelegates<RocketView>(GameResources.instance.rocketExplosionFx)
             );
         }
+
+        public void SetHudCanvasVisible(ICell<bool> visible) => hudCanvas.SetActive(visible);
 
         public void UpdateTargetingArrow(Vector3 pos, Quaternion rot)
         {

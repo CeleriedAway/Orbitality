@@ -40,12 +40,15 @@ namespace Game
             
             // Here is the reactive library operators example 
             // game model is changing over time, and collections in game model are changing over time
-            // Join() allows to collapse any layers of complexity into simple IReactiveCollection or ICell
+            // Join() allows to collapse any complex dependant changes into simple IReactiveCollection or ICell
             // Its very cool because view actually do not care when and how game model is changed, it just shows dynamic collection of items
             // MapWithDefaultIfNull(...) allows to choose empty collection when game model is null
             var planets = gameCell.MapWithDefaultIfNull(m => m.planets, StaticCollection<Planet>.Empty()).Join();
             var rockets = gameCell.MapWithDefaultIfNull(m => m.rockets, StaticCollection<RocketInstance>.Empty()).Join();
             view.Show(planets, rockets, gameCell.Map(g => g.playerPlanetId));
+            
+            view.SetHudCanvasVisible(paused.Not());
+            ResetTitleToDefault();
         }
 
         public void OnApplicationQuit()
@@ -58,12 +61,15 @@ namespace Game
         {
             gameCell.value = null;
             paused.value = true;
-            menu.title.text = $"You {result}!";
+            if (result == GameResult.Lose)
+                menu.title.text = $"You {result}!";
+            else 
+                menu.title.text = $"Orbitality!!!";
         }
 
         void ResetTitleToDefault()
         {
-            menu.title.text = "Orbitality";
+            menu.title.text = "Orbitality?";
         }
 
         public void Update()

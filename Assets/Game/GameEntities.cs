@@ -68,6 +68,7 @@ namespace Game
     {
         Undefined,
         Win,
-        Loss
+        Lose
     }
+
 }

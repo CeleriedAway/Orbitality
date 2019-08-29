@@ -13,8 +13,8 @@ namespace Game
         }
         void Update()
         {
-            transform.position = rocket.position.ToVolume();
-            transform.rotation = Quaternion.LookRotation(rocket.speed.ToVolume());
+            transform.position = rocket.position.HorizontalToVec3();
+            transform.rotation = Quaternion.LookRotation(rocket.speed.HorizontalToVec3());
         }
     }
 }

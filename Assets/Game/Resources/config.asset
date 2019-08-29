@@ -19,7 +19,7 @@ MonoBehaviour:
     damage: 7
     cooldown: 2
     gravityInfluence: 1.5
-    description: MOSQUITO\nFast and agile
+    description: WASP\nFast and agile
     invulTime: 1
   - name: Steampunk
     startingSpeed: 1.3
@@ -37,3 +37,5 @@ MonoBehaviour:
     gravityInfluence: -0.8
     description: DRAGONFLY\nAntimatter surprise
     invulTime: 1
+  minAiPlayers: 1
+  maxAiPlayers: 8

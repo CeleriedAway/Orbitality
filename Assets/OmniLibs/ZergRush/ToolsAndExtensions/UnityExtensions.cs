@@ -651,7 +651,7 @@ public static class UnityExtensions
         return vec;
     }
 
-    public static Vector3 ToVolume(this Vector2 vec)
+    public static Vector3 HorizontalToVec3(this Vector2 vec)
     {
         return new Vector3(vec.x, 0, vec.y);
     }

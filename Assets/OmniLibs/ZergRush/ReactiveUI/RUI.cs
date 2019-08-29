@@ -25,7 +25,7 @@ namespace ZergRush.ReactiveUI
         public IReactiveCollection<TData> collection;
         public LinearViewLoader<TView, TData> viewLoader;
         public IScrollViewLayout layout;
-        public TableDelegates<TView> delegates;
+        public PresentDelegates<TView> delegates;
         public PresentOptions options;
         public bool animationsEnabled;
 
@@ -67,7 +67,7 @@ namespace ZergRush.ReactiveUI
             var viewStorage = components.viewLoader;
             var viewPort = components.viewPort;
             var layout = components.layout;
-            var delegates = components.delegates ?? new TableDelegates<TView>();
+            var delegates = components.delegates ?? new PresentDelegates<TView>();
             var collection = components.collection;
 
             components.addConnection = new AnonymousDisposable(() => { viewStorage.UnloadAll(); });
@@ -184,7 +184,7 @@ namespace ZergRush.ReactiveUI
             PrefabRef<TView> prefab = default,
             Func<TData, PrefabRef<TView>> prefabSelector = null,
             IScrollViewLayout layout = null, // Linear layout is default
-            TableDelegates<TView> delegates = null,
+            PresentDelegates<TView> delegates = null,
             Func<TData, IEventReader> updater = null,
             PresentOptions options = PresentOptions.None
                 ) where TView : ReusableView
@@ -218,7 +218,7 @@ namespace ZergRush.ReactiveUI
                 };
                 show = showAndSubscribe;
             }
-            delegates = delegates ?? new TableDelegates<TView>();
+            delegates = delegates ?? new PresentDelegates<TView>();
             if (delegates.onInsert != null) show += (d, view) =>
             {
                 if (components.animationsEnabled) delegates.onInsert(view);
@@ -298,8 +298,8 @@ namespace ZergRush.ReactiveUI
             Func<TGroup, TGroup, int> groupSort,
             Func<TData, TData, int> itemSort,
             LinearLayoutSettings settings,
-            TableDelegates<TView> delegates = null,
-            TableDelegates<TViewGroup> groupViewDelegates = null
+            PresentDelegates<TView> delegates = null,
+            PresentDelegates<TViewGroup> groupViewDelegates = null
         ) where TView : ReusableView where TViewGroup : ReusableView
         {
             float LayoutBoundingsFactory(GroupItem<TGroup, TData, TView> item) =>
@@ -496,7 +496,7 @@ namespace ZergRush.ReactiveUI
             Action<TData, TView> show = null,
             Func<TData, PrefabRef<TView>> prefabSelector = null,
             IScrollViewLayout layout = null, // Linear layout is default
-            TableDelegates<TView> delegates = null,
+            PresentDelegates<TView> delegates = null,
             PresentOptions options = PresentOptions.UseLoadedViews
             ) where TView : ReusableView
         {
@@ -518,7 +518,7 @@ namespace ZergRush.ReactiveUI
             PrefabRef<TView> prefab,
             Action<TData, TView> fillFactory,
             IScrollViewLayout layout = null, // Linear layout is default
-            TableDelegates<TView> delegates = null,
+            PresentDelegates<TView> delegates = null,
             PresentOptions options = PresentOptions.UseLoadedViews) where TView : ReusableView
         {
             var components = CreateBasicTableComponents(data, rect, fillFactory, prefab: prefab, 
@@ -657,7 +657,7 @@ namespace ZergRush.ReactiveUI
             Func<T, PrefabRef<TView>> prefabSelector = null,
             IViewPool<TView, T> pool = null,
             PresentOptions options = PresentOptions.UseLoadedViews,
-            TableDelegates<TView> delegates = null
+            PresentDelegates<TView> delegates = null
             ) where TView : ReusableView
         {
             var components = CreateBasicTableComponents(coll, parent, show, pool, prefab, prefabSelector, null, delegates, updater, options);

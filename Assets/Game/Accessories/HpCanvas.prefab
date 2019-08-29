@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2409090875834387818}
   - component: {fileID: 2409090875834387816}
   - component: {fileID: 2409090875834387819}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HpBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 2409090876050800682}
   - component: {fileID: 2409090876050800687}
   - component: {fileID: 2409090876050800683}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HpCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -135,7 +135,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &2409090876050800687
 MonoBehaviour:
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 2409090876911676603}
   - component: {fileID: 2409090876911676601}
   - component: {fileID: 2409090876911676600}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HpFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 7907294337023487229}
   - component: {fileID: 9076335256779225368}
   - component: {fileID: 6182499084183052713}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Cooldown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -326,7 +326,7 @@ GameObject:
   - component: {fileID: 8982420925126274025}
   - component: {fileID: 4409693657755571487}
   - component: {fileID: 7310811042025302028}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HpFill
   m_TagString: Untagged
   m_Icon: {fileID: 0}

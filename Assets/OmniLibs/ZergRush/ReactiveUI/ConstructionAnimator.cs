@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace ZergRush.ReactiveUI
 {
-    public class TableDelegates<TView>
+    public class PresentDelegates<TView>
         where TView : ReusableView
     {
         // Used to animate dynamic insertion somehow
@@ -18,12 +18,12 @@ namespace ZergRush.ReactiveUI
         // Callback for proper view move animation if layout was changed.
         public Func<TView, Vector2, IDisposable> moveAnimation;
 
-        public static TableDelegates<TView> WithRemoveAnimation(Func<TView, float> nRemove) =>
-            new TableDelegates<TView> {onRemove = nRemove};
+        public static PresentDelegates<TView> WithRemoveAnimation(Func<TView, float> nRemove) =>
+            new PresentDelegates<TView> {onRemove = nRemove};
 
-        public static TableDelegates<TView> FadeInOut(float time)
+        public static PresentDelegates<TView> FadeInOut(float time)
         {
-            return new TableDelegates<TView>
+            return new PresentDelegates<TView>
             {
                 onInsert = view =>
                 {
@@ -47,9 +47,9 @@ namespace ZergRush.ReactiveUI
             };
         }
         
-        public static TableDelegates<TView> ScaleInOut(float time, float minScale = 0.2f, float easeAmplitude = 0.1f)
+        public static PresentDelegates<TView> ScaleInOut(float time, float minScale = 0.2f, float easeAmplitude = 0.1f)
         {
-            return new TableDelegates<TView>
+            return new PresentDelegates<TView>
             {
                 onInsert = view =>
                 {

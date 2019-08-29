@@ -28,7 +28,7 @@ namespace Game
         void Update()
         {
             rotation += Time.deltaTime;
-            transform.position = planet.position.ToVolume();
+            transform.position = planet.position.HorizontalToVec3();
             transform.rotation = Quaternion.AngleAxis(rotation, Vector3.up);
             hpBar.hpBarFill.fillAmount = planet.hp / planet.config.maxHp;
             hpBar.shootCooldownRoot.gameObject.SetActiveSafe(planet.onCooldown);

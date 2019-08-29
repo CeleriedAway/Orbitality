@@ -21,6 +21,7 @@ namespace Game
     [Serializable]
     public class Planet
     {
+        public int id;
         [CanBeNull] public RocketConfig rocketUsed;
         [CanBeNull] public PlanetConfig config;
 
@@ -31,7 +32,6 @@ namespace Game
         public float currentRocketCooldown;
         public bool onCooldown => currentRocketCooldown > 0;
         public float relativeCooldown => currentRocketCooldown / rocketUsed.cooldown;
-        public int id;
         
         // In some simple cases its ok to store view pointer
         // But its makes a little less convenient code, so often this is not a production case

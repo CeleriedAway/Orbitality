@@ -32,6 +32,7 @@ namespace Game
                 gameCell.value = GameModel.New(menu.rocketConfigSelected);
                 paused.value = false;
                 ResetTitleToDefault();
+                view.AdjustCamera(game.planets.Count - 1);
             });
             // Also a reactive binding shortcut
             menu.resume.SetActive(gameCell.IsNot(null));
@@ -94,7 +95,7 @@ namespace Game
                     // updating arrow
                     var arrowCenterShift = dir.SwapYZ().normalized * gamePlanet.config.radius;
                     view.UpdateTargetingArrow(
-                        gamePlanet.position.ToVolume() + arrowCenterShift,
+                        gamePlanet.position.HorizontalToVec3() + arrowCenterShift,
                         Quaternion.LookRotation(dir.SwapYZ())
                         );
 

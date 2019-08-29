@@ -1,4 +1,5 @@
 using UnityEngine;
+using ZergRush.ReactiveUI;
 
 namespace Game
 {
@@ -10,8 +11,8 @@ namespace Game
         static GameResources _instance;
         public static GameResources instance => _instance ?? (_instance = Resources.Load<GameResources>("resources"));
 
-        public Transform planetDeathFx;
-        public Transform rocketExplosionFx;
+        public ReusableView planetDeathFx;
+        public ReusableView rocketExplosionFx;
         public HpBarCanvas hpBar;
     }
 }

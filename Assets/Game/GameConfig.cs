@@ -12,5 +12,8 @@ namespace Game
         public static GameConfig instance => _instance ?? (_instance = Resources.Load<GameConfig>("config"));
         
         public List<RocketConfig> rockets;
+        
+        [Range(1, 8)] public int minAiPlayers;
+        [Range(1, 8)] public int maxAiPlayers;
     }
 }

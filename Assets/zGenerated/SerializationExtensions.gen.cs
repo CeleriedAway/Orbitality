@@ -39,6 +39,9 @@ public static partial class SerializationExtensions
                 reader.Read();
                 switch(name)
                 {
+                    case "id":
+                    self.id = (int)(Int64)reader.Value;
+                    break;
                     case "rocketUsed":
                     if (reader.TokenType == JsonToken.Null) {
                         self.rocketUsed = null;
@@ -73,9 +76,6 @@ public static partial class SerializationExtensions
                     case "currentRocketCooldown":
                     self.currentRocketCooldown = (System.Single)(double)reader.Value;
                     break;
-                    case "id":
-                    self.id = (int)(Int64)reader.Value;
-                    break;
                 }
             }
             else if (reader.TokenType == JsonToken.EndObject) { break; }
@@ -84,6 +84,8 @@ public static partial class SerializationExtensions
     public static void WriteJson(this Game.Planet self, JsonTextWriter writer) 
     {
         writer.WriteStartObject();
+        writer.WritePropertyName("id");
+        writer.WriteValue(self.id);
         if (self.rocketUsed == null)
         {
             writer.WritePropertyName("rocketUsed");
@@ -112,8 +114,6 @@ public static partial class SerializationExtensions
         self.position.WriteJson(writer);
         writer.WritePropertyName("currentRocketCooldown");
         writer.WriteValue(self.currentRocketCooldown);
-        writer.WritePropertyName("id");
-        writer.WriteValue(self.id);
         writer.WriteEndObject();
     }
     public static UnityEngine.Vector2 ReadFromJsonUnityEngine_Vector2(this JsonTextReader reader) 
@@ -223,6 +223,12 @@ public static partial class SerializationExtensions
                     case "cooldown":
                     self.cooldown = (System.Single)(double)reader.Value;
                     break;
+                    case "gravityInfluence":
+                    self.gravityInfluence = (System.Single)(double)reader.Value;
+                    break;
+                    case "description":
+                    self.description = (string) reader.Value;
+                    break;
                     case "invulTime":
                     self.invulTime = (System.Single)(double)reader.Value;
                     break;
@@ -244,6 +250,10 @@ public static partial class SerializationExtensions
         writer.WriteValue(self.damage);
         writer.WritePropertyName("cooldown");
         writer.WriteValue(self.cooldown);
+        writer.WritePropertyName("gravityInfluence");
+        writer.WriteValue(self.gravityInfluence);
+        writer.WritePropertyName("description");
+        writer.WriteValue(self.description);
         writer.WritePropertyName("invulTime");
         writer.WriteValue(self.invulTime);
         writer.WriteEndObject();
@@ -302,6 +312,9 @@ public static partial class SerializationExtensions
                     case "lifeTime":
                     self.lifeTime = (System.Single)(double)reader.Value;
                     break;
+                    case "parentId":
+                    self.parentId = (int)(Int64)reader.Value;
+                    break;
                 }
             }
             else if (reader.TokenType == JsonToken.EndObject) { break; }
@@ -328,6 +341,8 @@ public static partial class SerializationExtensions
         writer.WriteValue(self.invulTime);
         writer.WritePropertyName("lifeTime");
         writer.WriteValue(self.lifeTime);
+        writer.WritePropertyName("parentId");
+        writer.WriteValue(self.parentId);
         writer.WriteEndObject();
     }
     public static void ReadFromJson<T>(this ZergRush.ReactiveCore.ReactiveCollection<T> self, JsonTextReader reader) where T : ZergRush.Alive.Livable, ILivableModification, IHashable

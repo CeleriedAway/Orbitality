@@ -30,12 +30,13 @@ namespace Game
         {
             // this is kind of 'whatever' code
             // usually code like this is replaced as soon as possible with valid GD data and configs
-            
+
+            var c = GameConfig.instance;
             var model = new GameModel();
             // sun as planet impl )) right now it seems almost ok, but I surely wont do that in real project
             model.planets.Add(NewPlanet(Sun, 0));
             
-            int planetCount = random.Range(5, 5);
+            int planetCount = random.Range(c.minAiPlayers + 1, c.maxAiPlayers + 1);
             float basePlanetOrbit = 1;
             for (int i = 1; i <= planetCount; i++)
             {

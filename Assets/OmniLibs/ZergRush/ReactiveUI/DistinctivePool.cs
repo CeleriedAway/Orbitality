@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using ZergRush.Alive;
 
 namespace ZergRush.ReactiveUI
 {
@@ -23,6 +24,7 @@ namespace ZergRush.ReactiveUI
         ViewPool<TView, TData> Pool(TData data)
         {
             var prefab = prefabSelector(data);
+            //if (prefab == null) throw new ZergRushException("Prefab is null for data {data}");
             return Pool(prefab);
         }
         

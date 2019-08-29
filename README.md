@@ -7,6 +7,7 @@ If I need to go better with performance and gameplay extensibility I would consi
 * entity component system
 * 2d grid proximity accelerator
 * unity 2d physics
+
 Rockets can be configured in Game/Resources/config scriptable object
 
 Orbits are more elliptic to better fit the screen.
